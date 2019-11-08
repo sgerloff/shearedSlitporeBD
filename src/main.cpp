@@ -37,14 +37,13 @@ int main( int argc, char *argv[] )
     for(int i = 0; i < 100000; ++i ){
         if(i%100==0)
             cout << i << endl;
+        
         sys.simulateForSteps(1);
         averageStress.doForSystem(sys);
         if(i%100==0)
             cout << averageStress.getStress().xz << endl;
 //         sys.printSystem("test");
     }
-
-    
     
     return 0;
 }

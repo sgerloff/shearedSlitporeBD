@@ -45,6 +45,7 @@ CARTESIAN_MATRIX &CARTESIAN_MATRIX::operator+= ( const CARTESIAN_MATRIX &cCoordI
    this->zx += cCoordIN.zx;
    this->zy += cCoordIN.zy;
    this->zz += cCoordIN.zz;
+   return *this;
 }
 
 CARTESIAN_MATRIX &CARTESIAN_MATRIX::operator-= ( const CARTESIAN_MATRIX &cCoordIN )
@@ -58,6 +59,7 @@ CARTESIAN_MATRIX &CARTESIAN_MATRIX::operator-= ( const CARTESIAN_MATRIX &cCoordI
    this->zx -= cCoordIN.zx;
    this->zy -= cCoordIN.zy;
    this->zz -= cCoordIN.zz;
+   return *this;
 }
 
 CARTESIAN_MATRIX &CARTESIAN_MATRIX::operator*= ( const CARTESIAN_MATRIX &cCoordIN )
@@ -71,6 +73,7 @@ CARTESIAN_MATRIX &CARTESIAN_MATRIX::operator*= ( const CARTESIAN_MATRIX &cCoordI
    this->zx *= cCoordIN.zx;
    this->zy *= cCoordIN.zy;
    this->zz *= cCoordIN.zz;
+   return *this;
 }
 
 CARTESIAN_MATRIX &CARTESIAN_MATRIX::operator/= ( const CARTESIAN_MATRIX &cCoordIN )
@@ -84,4 +87,5 @@ CARTESIAN_MATRIX &CARTESIAN_MATRIX::operator/= ( const CARTESIAN_MATRIX &cCoordI
    this->zx /= cCoordIN.zx;
    this->zy /= cCoordIN.zy;
    this->zz /= cCoordIN.zz;
+   return *this;
 }
