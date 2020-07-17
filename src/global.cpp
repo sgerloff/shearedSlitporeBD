@@ -21,9 +21,9 @@ string app_home( string str )
 {
    stringstream output;
 
-   if( home == "/homes2/physik/gerloff" )
+   if( home == "/homes2/physik/gerloff" ) //Home directory of the math cluster
    {
-      output << "/net/work/gerloff/";
+      output << "/net/work/gerloff/"; //Work directory of the math cluster
    }
    else
    {

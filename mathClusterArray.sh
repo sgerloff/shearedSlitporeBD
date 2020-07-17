@@ -7,27 +7,22 @@ if [ $# -eq 0 ] ; then
 fi
 set -eu
 
-jobName=testSemaphore
+jobName=sampleJob
 
-param=( $(seq 0 100) )
-# arg2L=(1.1 2.2 3.3)
-# arg3L=(1e+07 1e+08 1e+09)
+shearRate=( 400 )
+ensIndex=( $(seq 0 1 99) )
 
-# ncFieldAmplitude=( $(seq 0 100 30000) )
-# shearRate=( $(seq 0 10 500) )
-# shearRate=( 0 160 240 400 )
-# ensIndex=( $(seq 0 99) )
-# numberOfParticles=( $(seq 50 2 150) )
-# numberOfParticles=( 76 78 110 )
 
 rm -f argumentList.argl
-iterateNestedForLoops param[@] >> argumentList.argl
+iterateNestedForLoops shearRate[@] ensIndex[@] >> argumentList.argl
 
 src="./src"
 workDir=/work/gerloff/jobFiles/workDir
-scp -r $src CMakeLists.txt argumentList.argl gerloff@cluster.math.tu-berlin.de:
-ssh gerloff@cluster.math.tu-berlin.de 'cd . && cmake -DCMAKE_BUILD_TYPE=RELEASE . && make -C .'
-ssh gerloff@cluster.math.tu-berlin.de "mv shearedSlitporeBD $workDir/${jobName} && mv argumentList.argl $workDir/${jobName}.argl"
 
-ssh gerloff@cluster.math.tu-berlin.de "cd $workDir; ./submitArrayJob ${jobName} $1"
+#Please change server address and directories accordingly, including the scripts runMathClusterTasks.sh, and submitMathClusterArrayJob.sh:
+scp -r $src runMathClusterTasks.sh submitMathClusterArrayJob.sh CMakeLists.txt argumentList.argl gerloff@cluster.math.tu-berlin.de:
+ssh gerloff@cluster.math.tu-berlin.de 'cd . && cmake -DCMAKE_BUILD_TYPE=RELEASE . && make -C .'
+ssh gerloff@cluster.math.tu-berlin.de "mv runMathClusterTasks.sh $workDir/ && mv submitMathClusterArrayJob.sh $workDir/ && mv shearedSlitporeBD $workDir/${jobName} && mv argumentList.argl $workDir/${jobName}.argl"
+
+ssh gerloff@cluster.math.tu-berlin.de "cd $workDir; ./submitMathClusterArrayJob.sh ${jobName} $1" #This script needs to be placed into the workDir. D
 ssh gerloff@cluster.math.tu-berlin.de "rm -rf src CMakeLists.txt"

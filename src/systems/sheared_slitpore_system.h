@@ -66,9 +66,6 @@ public:
     SHEARED_SLITPORE_SYSTEM ( SHEARED_SLITPORE_PARAMETERS& sPin );
     virtual void setSystemParameters ( SHEARED_SLITPORE_PARAMETERS& sPin );
     
-    //Print and read single files per ensemble:
-    virtual void readEnsembleSystem( int ensembleIndex );
-    virtual void printSystemWithEnsembleIndex( int ensembleIndex );
     //Print and read from configuration container:
     virtual void printConfigurationToEnsembleContainer(string dir, string str, int ensembleIndex );
     virtual void readConfigurationToEnsembleContainer(string dir, string str, int ensembleIndex );

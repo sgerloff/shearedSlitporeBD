@@ -2,6 +2,7 @@
 #define READ_DATA_FROM_FILE_H
 
 #include "../global.h"
+#include <fstream>
 
 class READ_DATA_FROM_FILE
 {

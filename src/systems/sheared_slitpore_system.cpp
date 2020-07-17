@@ -306,23 +306,6 @@ CARTESIAN_MATRIX SHEARED_SLITPORE_SYSTEM::getMeanStress()
     return -1.*meanStress/simBox.getVolume();
 }
 
-void SHEARED_SLITPORE_SYSTEM::readEnsembleSystem ( int ensembleIndex )
-{
-    string inputString = app_home ( "" ) + "config_ensemble/ensemble_"+app_incomplete_identifier( "" )+"/shear_"+ app_number ( "", shearForce.getShearRate() ) + "/configuration"+ app_identifier ( "" ) + "_ens_" + app_number ( "",ensembleIndex ) + ".txt";
-    cout << inputString << endl;
-    readFromString ( inputString );
-}
-
-void SHEARED_SLITPORE_SYSTEM::printSystemWithEnsembleIndex ( int ensembleIndex )
-{
-    string dir = app_home ( "" ) + "config_ensemble/ensemble_"+app_incomplete_identifier( "" )+"/shear_"+ app_number ( "", shearForce.getShearRate() ) ;
-    string cmd = "mkdir -p " + dir;
-    system( cmd.c_str() );
-    string outputString = dir + "/configuration"+ app_identifier ( "" ) + "_ens_" + app_number ( "",ensembleIndex ) + ".txt";
-     
-    printParticlesOfSystem( outputString );
-}
-
 double SHEARED_SLITPORE_SYSTEM::getShearRate()
 {
     return shearForce.getShearRate();
