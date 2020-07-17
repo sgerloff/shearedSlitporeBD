@@ -1,46 +1,52 @@
 #include "printer.h"
 
-// string exec(char* cmd) {
-//     FILE* pipe = popen(cmd, "r");
-//     if (!pipe) return "ERROR";
-//     char buffer[128];
-//     std::string result = "";
-//     while(!feof(pipe)) {
-//       if(fgets(buffer, 128, pipe) != NULL)
-//          result += buffer;
-//     }
-//     pclose(pipe);
-//     return result;
-// }
-
 PRINTER::PRINTER()
 {
-   setFileExtension("txt");
-   setDirectoryPathAndOutputFile( "", "" );
+    setExclusiveReadAndWrite(100,10);
+    EXCLUSIVE = false;
+
+    setFileExtension("txt");
+    setDirectoryPathAndOutputFile( "", "" );
 }
 
 PRINTER::PRINTER( string outputFileIn )
 {
-   setFileExtension("txt");
-   setDirectoryPathAndOutputFile( "", outputFileIn );
+    setExclusiveReadAndWrite(100,10);
+    EXCLUSIVE = false;
+
+    setFileExtension("txt");
+    setDirectoryPathAndOutputFile( "", outputFileIn );
 }
 
 PRINTER::PRINTER( string directoryPathIn, string outputFileIn )
 {
-   setFileExtension("txt");
-   setDirectoryPathAndOutputFile( directoryPathIn, outputFileIn );
+    setExclusiveReadAndWrite(100,10);
+    EXCLUSIVE = false;
+
+    setFileExtension("txt");
+    setDirectoryPathAndOutputFile( directoryPathIn, outputFileIn );
 }
 
 PRINTER::~PRINTER()
 {
-   file.close();
+    file.close();
+    if( EXCLUSIVE ) {
+        rmdir( lockDir.c_str() );
+    }
+}
+
+void PRINTER::setExclusiveReadAndWrite(int maxWaitCountsIn, int waitSecondsIn)
+{
+    EXCLUSIVE = true;
+    maxWaitCounts = maxWaitCountsIn;
+    waitSeconds = waitSecondsIn;
 }
 
 void PRINTER::setFileExtension ( string fileExtensionIn )
 {
     remove( filePath.c_str() );
     fileExtension = fileExtensionIn;
-    closeFile();
+    file.close();
     getFilePath();
     openFile();
 }
@@ -50,61 +56,76 @@ bool PRINTER::fileIsEmpty()
     file.seekp(0, ios::end); // put the "cursor" at the end of the file
     double length = file.tellp();
     if( length == 0 )
-	return true;
+        return true;
     else
-	return false;
+        return false;
 }
 
 void PRINTER::setDirectoryPathAndOutputFile( string directoryPathIn, string outputFileIn )
 {
-   directoryPath = directoryPathIn;
-   outputFile = outputFileIn;
-   getFilePath();
+    directoryPath = directoryPathIn;
 
-   openFile();
+    string cmd = "mkdir -p " + app_home( directoryPath );
+    system( cmd.c_str() );
+
+    outputFile = outputFileIn;
+    getFilePath();
+
+    if( EXCLUSIVE ) {
+        getExclusiveAccess();
+    }
+
+    openFile();
+}
+
+void PRINTER::getExclusiveAccess()
+{
+    lockDir = app_home( "" ) + directoryPath + "/" + outputFile + ".lock.d";
+    int count = 0;
+
+    while( mkdir(lockDir.c_str(), 0755) != 0 ) {
+
+        if(count == 0)
+            cout << "File currently locked" << endl;
+        else
+            cout << "." << endl;
+
+        sleep( rand() % waitSeconds + 1 );
+
+        ++count;
+        if( count >= maxWaitCounts ) {
+            cout << "Waited for up to" << maxWaitCounts*waitSeconds << " seconds; Exit!" << endl;
+            exit(1);
+        }
+    }
 }
 
 void PRINTER::getFilePath()
 {
-   filePath = app_home( "" ) + directoryPath + "/" + outputFile + "." + fileExtension;
+    filePath = app_home( "" ) + directoryPath + "/" + outputFile + "." + fileExtension;
 }
 
 void PRINTER::openFile()
 {
-   file.close();
-   string cmd = "mkdir -p " + app_home( directoryPath );
-   system( cmd.c_str() );
-
-   file.open( filePath.c_str(), ios::app );
+    file.close();
+    file.open( filePath.c_str(), ios::app );
 }
 
 void PRINTER::removeFile()
 {
-   file.close();
-   remove( filePath.c_str() );
-   openFile();
+    file.close();
+    remove( filePath.c_str() );
+    openFile();
 }
 
-
-
-void PRINTER::setDescription( string column0, string column1, string column2, string column3, string column4, string column5, string column6, string column7, string column8, string column9 )
+void PRINTER::printLine(vector<double> vecIn)
 {
-   file << column0
-        << "\t" << column1
-        << "\t" << column2
-        << "\t" << column3
-        << "\t" << column4
-        << "\t" << column5
-        << "\t" << column6
-        << "\t" << column7
-        << "\t" << column8
-        << "\t" << column9
-        << endl;
-}
-
-void PRINTER::closeFile()
-{
-   file.close();
+    file << vecIn[0];
+    for(int i = 1; i < vecIn.size(); ++i) {
+        file << "\t";
+        file << vecIn[i];
+    }
+    file << endl;
 }
 
 

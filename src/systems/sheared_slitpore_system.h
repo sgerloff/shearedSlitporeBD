@@ -11,6 +11,8 @@
 
 #include "../command/generate_square_layers.h"
 
+#include "../struct/configuration_container.h"
+
 class SHEARED_SLITPORE_SYSTEM : public  CONFINED_BROWNIAN_PARTICLES
 {
    
@@ -63,8 +65,13 @@ public:
     SHEARED_SLITPORE_SYSTEM();
     SHEARED_SLITPORE_SYSTEM ( SHEARED_SLITPORE_PARAMETERS& sPin );
     virtual void setSystemParameters ( SHEARED_SLITPORE_PARAMETERS& sPin );
+    
+    //Print and read single files per ensemble:
     virtual void readEnsembleSystem( int ensembleIndex );
     virtual void printSystemWithEnsembleIndex( int ensembleIndex );
+    //Print and read from configuration container:
+    virtual void printConfigurationToEnsembleContainer(string dir, string str, int ensembleIndex );
+    virtual void readConfigurationToEnsembleContainer(string dir, string str, int ensembleIndex );
     
     virtual string getIdentifierString();
     

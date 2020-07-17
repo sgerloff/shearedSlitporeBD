@@ -345,6 +345,69 @@ vector<double> SHEARED_SLITPORE_SYSTEM::getEnergyPerParticle()
     return energy;
 }
 
+void SHEARED_SLITPORE_SYSTEM::printConfigurationToEnsembleContainer(string dir, string str, int ensembleIndex)
+{
+    CONFIGURATION_CONTAINER container( "configContainer/" + dir, "ensembleContainer" + str + app_identifier ( "" ) );
+    
+    
+    vector<double> configLine;
+    configLine.clear();
+    vector<CHARGED_PARTICLE> particleList = getParticleList();
+    for( int i = 0; i < particleList.size(); ++i ){
+        configLine.push_back( particleList[i].position.x );
+        configLine.push_back( particleList[i].position.y );
+        configLine.push_back( particleList[i].position.z );
+        configLine.push_back( particleList[i].boxPosition.x );
+        configLine.push_back( particleList[i].boxPosition.y );
+        configLine.push_back( particleList[i].species );
+    }
+    
+    container.writeToEnsembleIndex( ensembleIndex, configLine );
+
+}
+
+void SHEARED_SLITPORE_SYSTEM::readConfigurationToEnsembleContainer(string dir, string str, int ensembleIndex)
+{
+    CONFIGURATION_CONTAINER container( "configContainer/" + dir, "ensembleContainer" + str + app_identifier ( "" ) );
+    vector<double> configLine = container.readEnsembleIndex( ensembleIndex );
+    
+    int requiredNumberOfEntries = 1.+6*getNumberOfParticles();
+    
+    if( configLine.size() == requiredNumberOfEntries ){
+        vector<CHARGED_PARTICLE> particleIn;
+        particleIn.clear();
+        vector<int> confinementIndexIn;
+        confinementIndexIn.clear();
+        
+        for( int i = 0; i < getNumberOfParticles(); ++i ){
+            CHARGED_PARTICLE newParticle;
+            switch ( read_toggle ) {
+            case 0:
+                newParticle.position = CARTESIAN_COORDINATE ( configLine[(6*i)+4], configLine[(6*i)+5], configLine[(6*i)+3] );
+                break;
+
+            case 1:
+                newParticle.position = CARTESIAN_COORDINATE ( configLine[(6*i)+1], configLine[(6*i)+2], configLine[(6*i)+3] );
+                break;
+            }
+            newParticle.species = configLine[(6*i)+6];
+            particleIn.push_back ( newParticle );
+            
+        }
+        
+        if ( particleIn.size() <= 0 ) {
+            setInitialConfigurationForLayersWithSides ( getNumberOfParticles() );
+        } else {
+            if ( particleIn.size() != getNumberOfParticles() ) {
+                cout << "Read in configuration number of particles deviates from expected number: "
+                    << particleIn.size() << " != " << getNumberOfParticles() << endl;
+            }
+            setParticleList ( particleIn );
+        }
+    } else {
+        cout << "Entry insufficent length: " << configLine.size() << "\t" << requiredNumberOfEntries << endl;
+    }
+}
 
 
 

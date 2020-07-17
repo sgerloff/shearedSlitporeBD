@@ -14,13 +14,34 @@
 #include <unistd.h>
 #include "randomc.h"
 
+#include <cmath>
+
 #include <iostream>
+////
+#include <cmath>
+#include <vector>
+#include <iostream>
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <fstream>
+#include <iomanip>
+#include <sstream>
+#include <time.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <boost/multi_array.hpp>
+#include <cassert>
+#include "randomc.h"
+using namespace boost;
+////
 using namespace std;
 
 extern int read_toggle;
 
 extern string home;
-
+extern string defaultOutputDir;
 
 extern vector<double> arguments;
 

@@ -13,6 +13,8 @@
 
 int main( int argc, char *argv[] )
 {             
+    defaultOutputDir = "/home/sgerloff2/projects/shearedSlitporeBD/output/"; //Sets default output dir for app_home( string str ); see global.cpp
+    
     srand( getpid()*time ( 0 ) );
     
     PARSE_ARGUMENTS parseArguments;
@@ -21,32 +23,41 @@ int main( int argc, char *argv[] )
     parseArguments.printArgumentList( arguments );
     
     
- ///////////////////////// SLIT-PORE SYSTEM ////////////////////////////////////   
+ /////////////////////// SLIT-PORE SYSTEM ////////////////////////////////////   
     
     SHEARED_SLITPORE_PARAMETERS sysParameters;
     sysParameters.setAsBiLayerWithShearRate( 0 );
     sysParameters.print();
 
     SHEARED_SLITPORE_SYSTEM sys ( sysParameters );
-    sys.readEnsembleSystem(0);
-    sys.STRESS=true;
-    sys.setShearRate(400);
     
-    AVERAGE_STRESS averageStress;
-    
-    for(int i = 0; i < 100000; ++i ){
-        if(i%100==0)
-            cout << i << endl;
-        
-        sys.simulateForSteps(1);
-        averageStress.doForSystem(sys);
-        if(i%100==0)
-            cout << averageStress.getStress().xz << endl;
-//         sys.printSystem("test");
-    }
+    sys.readEnsembleSystem(47);
+    vector<CHARGED_PARTICLE> particleList = sys.getParticleList();
+    cout << particleList[553].position << "\t" << particleList[553].species << endl;
+    sys.readConfigurationToEnsembleContainer("","",47);
+    particleList = sys.getParticleList();
+    cout << particleList[553].position << "\t" << particleList[553].species << endl;
+
+//     sys.STRESS=true;
+//     sys.setShearRate(400);
+//     
+//     AVERAGE_STRESS averageStress;
+//     
+//     for(int i = 0; i < 100000; ++i ){
+//         if(i%100==0)
+//             cout << i << endl;
+//         
+//         sys.simulateForSteps(1);
+//         averageStress.doForSystem(sys);
+//         if(i%100==0)
+//             cout << averageStress.getStress().xz << endl;
+// //         sys.printSystem("test");
+//     }
     
     return 0;
 }
+
+// TO DO: Configuration container for serial read and write into a single file from multiple processes (mkdir semaphore: https://unix.stackexchange.com/questions/70/what-unix-commands-can-be-used-as-a-semaphore-lock)
 
 
 

@@ -18,6 +18,7 @@ src/command/average_stress.cpp
 src/command/calculate_forces.cpp
 src/command/generate_square_layers.cpp 
 
+src/struct/configuration_container.cpp
 src/struct/charged_particle.cpp
 src/struct/particle.cpp
 src/struct/slit_pore_box.cpp
@@ -27,6 +28,7 @@ src/struct/cartesian_matrix.cpp
 src/systems/sheared_slitpore_system.cpp
 src/systems/confined_brownian_particles.cpp
  
+src/tools/read_data_from_file.cpp
 src/tools/printer.cpp 
 src/tools/parse_arguments.cpp
 
