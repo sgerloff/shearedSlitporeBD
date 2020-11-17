@@ -14,6 +14,7 @@ cd build
 cmake ..
 cmake --build .
 ```
+Importantly: Before starting you need to edit the ```src/main.cpp``` file to specify the intended folder "```defaultOutputDir```" for numeric output. 
 Then you can simply execute the pre-scripted sample calculation by providing the target shear rate and ensemble index:
 ```sh
 build/shearedSlitporeBD 400 0
