@@ -28,6 +28,7 @@ src/struct/cartesian_matrix.cpp
 src/systems/sheared_slitpore_system.cpp
 src/systems/confined_brownian_particles.cpp
  
+src/tools/progressbar.cpp
 src/tools/read_data_from_file.cpp
 src/tools/printer.cpp 
 src/tools/parse_arguments.cpp

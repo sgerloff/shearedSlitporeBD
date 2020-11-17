@@ -349,7 +349,7 @@ void SHEARED_SLITPORE_SYSTEM::printConfigurationToEnsembleContainer(string dir, 
 
 }
 
-void SHEARED_SLITPORE_SYSTEM::readConfigurationToEnsembleContainer(string dir, string str, int ensembleIndex)
+void SHEARED_SLITPORE_SYSTEM::readConfigurationFromEnsembleContainer(string dir, string str, int ensembleIndex)
 {
     CONFIGURATION_CONTAINER container( "configContainer/" + dir, "ensembleContainer" + str + app_identifier ( "" ) );
     vector<double> configLine = container.readEnsembleIndex( ensembleIndex );

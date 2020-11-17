@@ -68,7 +68,7 @@ public:
     
     //Print and read from configuration container:
     virtual void printConfigurationToEnsembleContainer(string dir, string str, int ensembleIndex );
-    virtual void readConfigurationToEnsembleContainer(string dir, string str, int ensembleIndex );
+    virtual void readConfigurationFromEnsembleContainer(string dir, string str, int ensembleIndex );
     
     virtual string getIdentifierString();
     
